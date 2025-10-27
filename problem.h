@@ -9,11 +9,12 @@ using namespace std;
 class Problem {
     public:
         Problem();
-        Problem(string initial, string goal);
+        Problem(string initial);
         string getInitialState() const;
         string getGoalState() const;
         vector<string> getSuccessors(const string& state) const;
         bool isGoalState(const string& state) const;
+        void printState(const string& state) const;
     private:
         string initialState;
         string goalState;
