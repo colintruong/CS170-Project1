@@ -1,7 +1,7 @@
 #include "problem.h"
 
 Problem::Problem() {
-    initialState = "120453786";
+    initialState = "123480765";
     goalState = "123456780";
 }
 

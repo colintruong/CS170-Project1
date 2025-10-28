@@ -1,64 +1,65 @@
 #include "UniformCostSearch.h"
+#include <queue>
+#include <iostream>
 
-UniformCostSearch::UniformCostSearch(const Problem& problem) : problem(problem) {}
+UniformCostSearch::UniformCostSearch(const Problem& p)
+    : problem(p), expandedCount(0), maxQueueSize(0), goalDepth(0) {}
+
+void UniformCostSearch::printNodeState(const string& state) const {
+    for (int i = 0; i < 9; i++) {
+        if (state[i] == '0')
+            cout << "b ";
+        else
+            cout << state[i] << " ";
+        if (i % 3 == 2)
+            cout << endl;
+    }
+}
 
 bool UniformCostSearch::solve() {
-    string initialState = problem.getInitialState();
-    string goalState = problem.getGoalState();
-    priority_queue<Node, vector<Node>, greater<int>> frontier;
+    auto cmp = [](const Node& a, const Node& b) { return a.cost > b.cost; };
+    priority_queue<Node, vector<Node>, decltype(cmp)> frontier(cmp);
+
     unordered_set<string> visited;
-    unordered_map<string, string> parent;
-    frontier.push({initialState, 0});
+    unordered_map<string, string> parent; // for reconstructing path
+
+    frontier.push({problem.getInitialState(), 0, 0});
+    visited.insert(problem.getInitialState());
 
     while (!frontier.empty()) {
         Node current = frontier.top();
         frontier.pop();
-        if (visited.count(current.state)) {
-            continue;
-        }
-        visited.insert(current.state);
-        if (problem.isGoalState(current.state)) {
-            cout << "Reached goal state with cost " << current.cost << endl;
-            printPath(parent, current.state);
+
+        cout << "The best state to expand with g(n) = " << current.cost << endl;
+        printNodeState(current.state);
+        cout << "Expanding this node..." << endl << endl;
+
+        expandedCount++;
+
+        if (current.state == problem.getGoalState()) {
+            goalDepth = current.depth;
+            cout << "Goal!!!" << endl;
+            cout << "To solve this problem the search algorithm expanded a total of "
+                 << expandedCount << " nodes." << endl;
+            cout << "The maximum number of nodes in the queue at any one time: "
+                 << maxQueueSize << "." << endl;
+            cout << "The depth of the goal node was " << goalDepth << "." << endl;
             return true;
         }
 
-        for (auto& next : problem.getSuccessors(current.state)) {
-            if (!visited.count(next)) {
-                parent[next] = current.state;
-                frontier.push({next, current.cost + 1});
+        vector<string> successors = problem.getSuccessors(current.state);
+
+        for (const string& next : successors) {
+            if (visited.find(next) == visited.end()) {
+                visited.insert(next);
+                frontier.push({next, current.cost + 1, current.depth + 1});
             }
         }
+
+        if (frontier.size() > (size_t)maxQueueSize)
+            maxQueueSize = frontier.size();
     }
+
     cout << "No solution found." << endl;
     return false;
-}
-
-void UniformCostSearch::printPath(unordered_map<string, string>& parent, string& goal) {
-    vector<string> path;
-    string currState = goal;
-    while (parent.find(currState) != parent.end()) {
-        path.push_back(currState);
-        currState = parent[currState];
-    }
-
-    reverse(path.begin(), path.end());
-
-    for (const string& state : path) {
-        printState(state);
-        cout << "--------" << endl;
-    }
-}
-
-void UniformCostSearch::printState(const string& state) const {
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            if (state[i * 3 + j] == '0') {
-                cout << "b ";
-            } else {
-                cout << state[i * 3 + j] << " ";
-            }
-        }
-        cout << endl;
-    }
 }
