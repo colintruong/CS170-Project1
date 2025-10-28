@@ -1,5 +1,6 @@
 #include <iostream>
 #include "problem.h"
+#include "UniformCostSearch.h"
 
 using namespace std;
 
@@ -44,6 +45,8 @@ int main() {
         cout << "Goal state: " << endl;
         problem.printState(problem.getGoalState());
         cout << endl;
+        UniformCostSearch UCS(problem);
+        UCS.solve();
     }
     return 0;
 }

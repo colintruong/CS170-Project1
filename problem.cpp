@@ -21,7 +21,7 @@ string Problem::getGoalState() const {
 void Problem::printState(const string& state) const {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            if  (state[i * 3 + j] == '0') {
+            if (state[i * 3 + j] == '0') {
                 cout << "b ";
             } else {
                 cout << state[i * 3 + j] << " ";
