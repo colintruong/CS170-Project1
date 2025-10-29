@@ -16,3 +16,18 @@ void MisplacedTileSearch::printNodeState(const string& state) const {
     }
 }
 
+int MisplacedTileSearch::h(const string& state) {
+    string goalState = "123456780";
+    int count = 0;
+    for (int i = 0; i < state.size(); i ++) {
+        if (state[i] != goalState[i]) {
+            count++;
+        }
+    }
+    return count;
+}
+
+bool MisplacedTileSearch::solve() {
+
+}
+

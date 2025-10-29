@@ -23,6 +23,8 @@ class MisplacedTileSearch {
     public:
         MisplacedTileSearch(const Problem& problem);
         bool solve();
+        int g(const string& state);
+        int h(const string& state);
 
     private:
         const Problem& problem;
