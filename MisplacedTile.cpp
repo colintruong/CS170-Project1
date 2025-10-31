@@ -1,7 +1,10 @@
 #include <MisplacedTile.h>
+#include <iostream>
 #include <queue>
-#include <vector>
-#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <algorithm>
+
 
 using namespace std;
 
@@ -30,7 +33,7 @@ int MisplacedTileSearch::h(const string& state) {
     return count;
 }
 
-int g(const string& state, const string& start, const unordered_map<string, string>& parent) {
+int MisplacedTileSearch::g(const string& state, const string& start, const unordered_map<string, string>& parent) {
     int cost = 0;
     string s = state;
     while (s != start) {
@@ -187,72 +190,75 @@ vector<string> MisplacedTileSearch::legalStates(const string& state) {
 }
 
 bool MisplacedTileSearch::solve() {
-    const string goalState = "123456780";
-    string startState = problem.getInitialState();
+    const string goal = "123456780";
+    string start = problem.getInitialState();
 
-    struct SearchNode {
-        int f;            // f = g + h
-        string state;     // encoded board
-        bool operator>(const SearchNode& o) const { return f > o.f; }
+    struct Node {
+        int f, g, h;
+        string state;
+        bool operator>(const Node& other) const { return f > other.f; }
     };
 
-    // Min-heap by f
-    priority_queue<SearchNode, vector<SearchNode>, greater<SearchNode>> open;
+    priority_queue<Node, vector<Node>, greater<Node>> open;
+    unordered_set<string> closed;
+    unordered_map<string, string> parent;
 
-    unordered_map<string, string> parent;  // child -> parent
-    unordered_set<string> closed;          // expanded states
+    int expandedCount = 0;
+    int maxQueueSize = 0;
+    int goalDepth = 0;
 
-    // push start
-    open.push({ h(startState) /* f = 0 + h */, startState });
+    // initial node
+    int hStart = h(start);
+    open.push({hStart, 0, hStart, start});
+
+    cout << "Expanding state" << endl;
+    printNodeState(start);
+    cout << endl;
 
     while (!open.empty()) {
-        SearchNode cur = open.top();
+        Node cur = open.top();
         open.pop();
 
-        if (closed.count(cur.state)) continue;  // skip stale
+        if (closed.count(cur.state)) continue;
         closed.insert(cur.state);
 
-        // Goal check
-        if (cur.state == goalState) {
-            // Reconstruct path
-            vector<string> path;
-            string s = cur.state;
-            while (true) {
-                path.push_back(s);
-                auto it = parent.find(s);
-                if (it == parent.end()) break;
-                s = it->second;
-            }
-            reverse(path.begin(), path.end());
-
-            // Print result
-            cout << "Solution in " << (int)path.size() - 1 << " moves:\n";
-            for (const auto& st : path) {
-                printNodeState(st);
-                cout << "-----\n";
-            }
+        if (cur.state == goal) {
+            cout << "Goal!!!" << endl;
+            cout << "To solve this problem the search algorithm expanded a total of "
+                 << expandedCount << " nodes." << endl;
+            cout << "The maximum number of nodes in the queue at any one time: "
+                 << maxQueueSize << "." << endl;
+            cout << "The depth of the goal node was " << cur.g << "." << endl;
             return true;
         }
 
-        // Expand neighbors
-        for (const string& nb : legalStates(cur.state)) {
-            if (closed.count(nb)) continue;
+        expandedCount++;
 
-            // tentative g = depth(parent-walk of current) + 1
-            int tentative_g = g(cur.state, startState, parent) + 1;
-            int nb_old_g = g(nb, startState, parent);
+        vector<string> children = legalStates(cur.state);
+        for (const string& child : children) {
+            if (closed.count(child)) continue;
 
-            // Set/Improve parent if this path is better
-            if (parent.find(nb) == parent.end() || tentative_g < nb_old_g) {
-                parent[nb] = cur.state;
-            }
+            parent[child] = cur.state;
+            int gCost = cur.g + 1;
+            int hCost = h(child);
+            int fCost = gCost + hCost;
 
-            int f = tentative_g + h(nb);
-            open.push({ f, nb });
+            open.push({fCost, gCost, hCost, child});
+
+            if ((int)open.size() > maxQueueSize)
+                maxQueueSize = open.size();
+        }
+
+        if (!open.empty()) {
+            Node next = open.top();
+            cout << "The best state to expand with g(n) = " << next.g
+                 << " and h(n) = " << next.h << " is..." << endl;
+            printNodeState(next.state);
+            cout << "Expanding this node..." << endl;
         }
     }
 
-    cout << "No solution found.\n";
+    cout << "No solution found." << endl;
     return false;
 }
 

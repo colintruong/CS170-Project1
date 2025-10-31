@@ -40,8 +40,8 @@ int main() {
     problem.printState(problem.getInitialState());
     cout << endl;
 
-    // UniformCostSearch UCS(problem);
-    // UCS.solve();
+    UniformCostSearch UCS(problem);
+    UCS.solve();
 
     MisplacedTileSearch MTS(problem);
     MTS.solve();
