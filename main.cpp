@@ -42,8 +42,6 @@ int main() {
 
     UniformCostSearch UCS(problem);
     UCS.solve();
-
-    MisplacedTileSearch MTS(problem);
-    MTS.solve();
+    
     return 0;
 }
