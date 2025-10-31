@@ -36,12 +36,31 @@ int main() {
     }
     Problem problem(initialState);
 
+    cout << "Enter you choice of algorithm: " << endl;
+    cout << "1 - Uniform Cost Search" << endl;
+    cout << "2 - A* with the Misplaced Tile heuristic." << endl;
+    cout << "3 - A* with the Euclidean distance heuristic." << endl;
+
+    cin >> choice;
+
     cout << "Expanding state" << endl;
     problem.printState(problem.getInitialState());
     cout << endl;
 
-    UniformCostSearch UCS(problem);
-    UCS.solve();
+    if(choice == 1) {
+        UniformCostSearch UCS(problem);
+        UCS.solve();
+    }
+    else if (choice == 2) {
+        MisplacedTileSearch MTS(problem);
+        MTS.solve();
+    }
+    else if (choice == 3) {
+        cout << "Not implemented yet." << endl;
+    }
+    else {
+        cout << "Error, invalid choice selected.  Exiting to console." << endl;
+    }
     
     return 0;
 }
