@@ -27,9 +27,21 @@ int MisplacedTileSearch::h(const string& state) {
     return count;
 }
 
+int g(const string& state, const string& start, const unordered_map<string, string>& parent) {
+    int cost = 0;
+    string s = state;
+    while (s != start) {
+        auto i = parent.find(s);
+        if (i == parent.end()) break; //no parent, ie; start state
+        s = i->second;
+        cost++;
+    }
+    return cost;
+}
+
 vector<string> MisplacedTileSearch::legalStates(const string& state) {
     vector<string> returnStates;
-    int a = state.find("0");
+    int a = state.find('0');
     if (a == 0) {
         string t = state;
         t[0] = state[1];

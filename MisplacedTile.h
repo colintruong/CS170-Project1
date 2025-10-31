@@ -23,7 +23,7 @@ class MisplacedTileSearch {
     public:
         MisplacedTileSearch(const Problem& problem);
         bool solve();
-        int g(const string& state);
+        int g(const string& state, const string& start, const unordered_map<string, string>& parent);
         int h(const string& state);
         vector<string> legalStates(const string& state);
         vector<string> aStar(const string& state);
