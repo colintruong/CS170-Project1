@@ -25,6 +25,7 @@ class MisplacedTileSearch {
         bool solve();
         int g(const string& state);
         int h(const string& state);
+        vector<string> legalStates(const string& state);
         vector<string> aStar(const string& state);
 
     private:
