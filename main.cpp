@@ -1,6 +1,7 @@
 #include <iostream>
 #include "problem.h"
 #include "UniformCostSearch.h"
+#include "MisplacedTile.h"
 
 using namespace std;
 
@@ -41,5 +42,6 @@ int main() {
 
     UniformCostSearch UCS(problem);
     UCS.solve();
+    
     return 0;
 }
