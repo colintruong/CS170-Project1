@@ -9,15 +9,15 @@
 
 using namespace std;
 
-struct Node {
-    string state;
-    int cost;
-    int depth;
+// struct Node {
+//     string state;
+//     int cost;
+//     int depth;
 
-    bool operator>(const Node& other) const {
-        return cost > other.cost;
-    }
-};
+//     bool operator>(const Node& other) const {
+//         return cost > other.cost;
+//     }
+// };
 
 class MisplacedTileSearch {
     public:

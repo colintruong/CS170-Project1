@@ -1,6 +1,7 @@
 #include <iostream>
 #include "problem.h"
 #include "UniformCostSearch.h"
+#include "MisplacedTile.h"
 
 using namespace std;
 
@@ -39,7 +40,10 @@ int main() {
     problem.printState(problem.getInitialState());
     cout << endl;
 
-    UniformCostSearch UCS(problem);
-    UCS.solve();
+    // UniformCostSearch UCS(problem);
+    // UCS.solve();
+
+    MisplacedTileSearch MTS(problem);
+    MTS.solve();
     return 0;
 }

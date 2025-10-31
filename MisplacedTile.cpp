@@ -1,4 +1,7 @@
 #include <MisplacedTile.h>
+#include <queue>
+#include <vector>
+#include <string>
 
 using namespace std;
 
@@ -184,6 +187,73 @@ vector<string> MisplacedTileSearch::legalStates(const string& state) {
 }
 
 bool MisplacedTileSearch::solve() {
+    const string goalState = "123456780";
+    string startState = problem.getInitialState();
 
+    struct SearchNode {
+        int f;            // f = g + h
+        string state;     // encoded board
+        bool operator>(const SearchNode& o) const { return f > o.f; }
+    };
+
+    // Min-heap by f
+    priority_queue<SearchNode, vector<SearchNode>, greater<SearchNode>> open;
+
+    unordered_map<string, string> parent;  // child -> parent
+    unordered_set<string> closed;          // expanded states
+
+    // push start
+    open.push({ h(startState) /* f = 0 + h */, startState });
+
+    while (!open.empty()) {
+        SearchNode cur = open.top();
+        open.pop();
+
+        if (closed.count(cur.state)) continue;  // skip stale
+        closed.insert(cur.state);
+
+        // Goal check
+        if (cur.state == goalState) {
+            // Reconstruct path
+            vector<string> path;
+            string s = cur.state;
+            while (true) {
+                path.push_back(s);
+                auto it = parent.find(s);
+                if (it == parent.end()) break;
+                s = it->second;
+            }
+            reverse(path.begin(), path.end());
+
+            // Print result
+            cout << "Solution in " << (int)path.size() - 1 << " moves:\n";
+            for (const auto& st : path) {
+                printNodeState(st);
+                cout << "-----\n";
+            }
+            return true;
+        }
+
+        // Expand neighbors
+        for (const string& nb : legalStates(cur.state)) {
+            if (closed.count(nb)) continue;
+
+            // tentative g = depth(parent-walk of current) + 1
+            int tentative_g = g(cur.state, startState, parent) + 1;
+            int nb_old_g = g(nb, startState, parent);
+
+            // Set/Improve parent if this path is better
+            if (parent.find(nb) == parent.end() || tentative_g < nb_old_g) {
+                parent[nb] = cur.state;
+            }
+
+            int f = tentative_g + h(nb);
+            open.push({ f, nb });
+        }
+    }
+
+    cout << "No solution found.\n";
+    return false;
 }
+
 
