@@ -1,6 +1,10 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <unordered_set>
+#include <algorithm>
+#include <queue>
+
 using namespace std;
 
 // Some of the helper functions needed to do the AStar search
@@ -111,6 +115,42 @@ vector<vector<vector<int>>> nextStates(const vector<vector<int>> &state){
         }
     }
     return next;
+}
+
+void aStar(vector<vector<int>> init){
+    priority_queue<Node*, vector<Node*>, Compare> q;
+    unordered_set<string> exploredSoFar;
+    Node* startNode = new Node(init, 0, euclidean(init));
+    q.push(startNode);
+    int visitedNodes = 0;
+    int maxNodesInQueue = 1;
+    while(!q.empty()){
+        Node* curr = q.top();
+        q.pop();
+        string s = StateToString2D(curr->state);
+        if(exploredSoFar.count(s)){
+            continue;
+        }
+        exploredSoFar.insert(s);
+        ++visitedNodes;
+        cout << "Start cost g(n) = " << curr->cost << ", Heuristic h(n) = " << curr->heuristic << endl;
+        printPuzzleState(curr->state);
+        if(goalReached(curr->state)){
+            cout << "We have reached the goal. Visited Nodes: " << visitedNodes << " maximum size of queue: " << maxNodesInQueue << ", and the goal's depth is: " << curr->cost << endl;
+            return;
+        }
+        vector<vector<vector<int>>> nxt = nextStates(curr->state);
+        for(int i = 0; i < nxt.size(); ++i){
+            vector<vector<int>> next = nxt[i];
+            string nextString =  StateToString2D(next);
+            if(!exploredSoFar.count(nextString)){
+                Node* child = new Node(next, curr->cost + 1, euclidean(next), curr);
+                q.push(child);
+            }
+        }
+        maxNodesInQueue = max(maxNodesInQueue, (int)q.size());
+    }
+    cout << "There is no solution :(" << endl;
 }
 
 int main(){
