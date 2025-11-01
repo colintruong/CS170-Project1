@@ -158,19 +158,158 @@ int main(){
     vector<vector<int>> state = {{1,2,3},
                                  {4,5,6},
                                  {7,8,0}};
-    printPuzzleState(state);
-    cout << StateToString2D(state) << endl;
-    cout << goalReached(state) << endl;
-    pair<int, int> position = findGoalPosition(goalState, 3);
-    cout << "( " << position.first << ", " << position.second << " )" << endl;
-    double heuristic = euclidean(state);
-    cout << heuristic << endl;
-    Node nodeTest(state, 3, heuristic);
-    cout << nodeTest.cost << " " << nodeTest.heuristic << " " << nodeTest.totalCost() << endl;
-    vector<vector<vector<int>>> nxt = nextStates(state);
-    for(int i = 0; i<nxt.size(); ++i){
-        printPuzzleState(nxt[i]);
-    }
+    cout << "Test 1: " << endl;
+    aStar(state);
+    cout << endl;
+    vector<vector<int>> state2 = {{1,2,3},
+                                {4,5,6},
+                                {7,0,8}
+    };
+    cout << "Test 2: " << endl;
+    aStar(state2);
+    cout << endl;
+    vector<vector<int>> state3 = {{1,2,3},
+                                {4,5,6},
+                                {0,7,8}
+    }; 
+    cout << "Test 3: " << endl;
+    aStar(state3);
+    cout << endl;
+    vector<vector<int>> state4 = {{1,3,6},
+                                {5,0,7},
+                                {4,8,2}
+    };
+    cout << "Test 4: " << endl;
+    aStar(state4);
+    cout << endl;
+    vector<vector<int>> state5 = {{8,6,7},
+                                {2,5,4},
+                                {3,0,1}
+    };
+    cout << "Test 5: " << endl;
+    aStar(state5);
+    cout << endl;
+    vector<vector<int>> state6 = {{1,2,3},
+                                {4,5,6},
+                                {8,7,0}
+    };
+    cout << "Test 6: " << endl;
+    aStar(state6);
+    cout << endl;
+    
+    // Test Cases for helper functions:
+    // cout << "Test 1: " << endl;
+    // vector<vector<int>> state = {{1,2,3},
+    //                              {4,5,6},
+    //                              {7,8,0}};
+    // printPuzzleState(state);
+    // cout << StateToString2D(state) << endl;
+    // cout << goalReached(state) << endl;
+    // pair<int, int> position = findGoalPosition(goalState, 3);
+    // cout << "( " << position.first << ", " << position.second << " )" << endl;
+    // double heuristic = euclidean(state);
+    // cout << heuristic << endl;
+    // Node nodeTest(state, 3, heuristic);
+    // cout << nodeTest.cost << " " << nodeTest.heuristic << " " << nodeTest.totalCost() << endl;
+    // vector<vector<vector<int>>> nxt = nextStates(state);
+    // for(int i = 0; i<nxt.size(); ++i){
+    //     printPuzzleState(nxt[i]);
+    // }
+
+    // cout << "Test 2: " << endl;
+    // vector<vector<int>> state2 = {{1,2,3},
+    //                             {4,5,6},
+    //                             {7,0,8}
+    // };
+    // printPuzzleState(state2);
+    // cout << StateToString2D(state2) << endl;
+    // cout << goalReached(state2) << endl;
+    // position = findGoalPosition(goalState, 3);
+    // cout << "( " << position.first << ", " << position.second << " )" << endl;
+    // heuristic = euclidean(state2);
+    // cout << heuristic << endl;
+    // Node nodeTest2(state2, 3, heuristic);
+    // cout << nodeTest.cost << " " << nodeTest.heuristic << " " << nodeTest.totalCost() << endl;
+    // nxt = nextStates(state2);
+    // for(int i = 0; i<nxt.size(); ++i){
+    //     printPuzzleState(nxt[i]);
+    // }
+
+    // cout << "Test 3: " << endl;
+    // vector<vector<int>> state3 = {{1,2,3},
+    //                             {4,5,6},
+    //                             {0,7,8}
+    // };
+    // printPuzzleState(state3);
+    // cout << StateToString2D(state3) << endl;
+    // cout << goalReached(state3) << endl;
+    // position = findGoalPosition(goalState, 3);
+    // cout << "( " << position.first << ", " << position.second << " )" << endl;
+    // heuristic = euclidean(state3);
+    // cout << heuristic << endl;
+    // Node nodeTest3(state3, 3, heuristic);
+    // cout << nodeTest.cost << " " << nodeTest.heuristic << " " << nodeTest.totalCost() << endl;
+    // nxt = nextStates(state3);
+    // for(int i = 0; i<nxt.size(); ++i){
+    //     printPuzzleState(nxt[i]);
+    // }
+
+    // cout << "Test 4: " << endl;
+    // vector<vector<int>> state4 = {{1,3,6},
+    //                             {5,0,7},
+    //                             {4,8,2}
+    // };
+    // printPuzzleState(state4);
+    // cout << StateToString2D(state4) << endl;
+    // cout << goalReached(state4) << endl;
+    // position = findGoalPosition(goalState, 3);
+    // cout << "( " << position.first << ", " << position.second << " )" << endl;
+    // heuristic = euclidean(state4);
+    // cout << heuristic << endl;
+    // Node nodeTest4(state4, 3, heuristic);
+    // cout << nodeTest.cost << " " << nodeTest.heuristic << " " << nodeTest.totalCost() << endl;
+    // nxt = nextStates(state4);
+    // for(int i = 0; i<nxt.size(); ++i){
+    //     printPuzzleState(nxt[i]);
+    // }
+
+    // cout << "Test 5: " << endl;
+    // vector<vector<int>> state5 = {{8,6,7},
+    //                             {2,5,4},
+    //                             {3,0,1}
+    // };
+    // printPuzzleState(state5);
+    // cout << StateToString2D(state5) << endl;
+    // cout << goalReached(state5) << endl;
+    // position = findGoalPosition(goalState, 3);
+    // cout << "( " << position.first << ", " << position.second << " )" << endl;
+    // heuristic = euclidean(state5);
+    // cout << heuristic << endl;
+    // Node nodeTest5(state5, 3, heuristic);
+    // cout << nodeTest.cost << " " << nodeTest.heuristic << " " << nodeTest.totalCost() << endl;
+    // nxt = nextStates(state5);
+    // for(int i = 0; i<nxt.size(); ++i){
+    //     printPuzzleState(nxt[i]);
+    // }
+
+    // cout << "Test 6: " << endl;
+    // vector<vector<int>> state6 = {{1,2,3},
+    //                             {4,5,6},
+    //                             {8,7,0}
+    // };
+    // printPuzzleState(state6);
+    // cout << StateToString2D(state6) << endl;
+    // cout << goalReached(state6) << endl;
+    // position = findGoalPosition(goalState, 3);
+    // cout << "( " << position.first << ", " << position.second << " )" << endl;
+    // heuristic = euclidean(state6);
+    // cout << heuristic << endl;
+    // Node nodeTest6(state6, 3, heuristic);
+    // cout << nodeTest.cost << " " << nodeTest.heuristic << " " << nodeTest.totalCost() << endl;
+    // nxt = nextStates(state6);
+    // for(int i = 0; i<nxt.size(); ++i){
+    //     printPuzzleState(nxt[i]);
+    // }
+
     return 0;
 }
-
